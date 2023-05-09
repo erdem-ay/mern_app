@@ -27,7 +27,7 @@ export default function Username() {
 
       <Toaster position='top-center' reverseOrder={false}></Toaster>
 
-      <div className="flex justify-center items-center h-screen">
+      <div className="flex justify-center  items-center h-screen">
         <div className={styles.glass}>
 
           <div className="title flex flex-col items-center">
