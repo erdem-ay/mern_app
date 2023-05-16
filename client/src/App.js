@@ -1,6 +1,6 @@
 import React from 'react'
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
-import Username from "./components/Username"
+import Email from "./components/Email"
 import Register from "./components/Register"
 import Password from "./components/Password"
 import Profile from "./components/Profile"
@@ -12,7 +12,7 @@ import PageNotFound from "./components/PageNotFound"
 const router = createBrowserRouter([
     {
         path: '/',
-        element: <Username></Username>
+        element: <Email></Email>
     },
     {
         path: '/register',

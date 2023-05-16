@@ -5,7 +5,7 @@ import { useFormik } from 'formik'
 import { profileValidation } from '../helper/validate';
 import convertToBase64 from "../helper/convert"
 
-import styles from '../styles/Username.module.css';
+import styles from "../styles/Email.module.css"
 import extend from '../styles/Profile.module.css'
 
 

@@ -3,8 +3,7 @@ import { Toaster } from 'react-hot-toast';
 import { useFormik } from 'formik'
 import { passwordValidate } from '../helper/validate';
 
-import styles from "../styles/Username.module.css"
-
+import styles from "../styles/Email.module.css"
 
 export default function Recovery() {
 

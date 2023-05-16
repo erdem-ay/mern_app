@@ -1,8 +1,18 @@
 import toast from "react-hot-toast";
+import { authenticate } from "./helper"
 
-/** validate login page username */
-export async function usernameValidate(values) {
-    const errors = usernameVerify({}, values)
+/** validate login page email / username */
+export const emailValidate = async (values) => {
+    const errors = emailVerify({}, values)
+
+    if (values.email) {
+        // check email exist or not
+        const { status } = await authenticate(values.email)
+
+        if(status !== 200){
+        errors.exist = toast.error('User does not exist...!')
+        }
+    }
 
     return errors;
 }
@@ -26,17 +36,17 @@ export async function resetPasswordValidation(values) {
 }
 
 /** validate register form */
-export async function registerValidation(values){
-    const errors = usernameVerify({}, values);
+export async function registerValidation(values) {
+    const errors = emailVerify({}, values);
     passwordVerify(errors, values);
-    emailVerify(errors, values);
+    emailVerifyy(errors, values);
 
     return errors;
 }
 
 /** validate profile page */
-export async function profileValidation(values){
-    const errors = emailVerify({}, values);
+export async function profileValidation(values) {
+    const errors = emailVerifyy({}, values);
     return errors;
 }
 
@@ -61,19 +71,19 @@ function passwordVerify(errors = {}, values) {
     return errors;
 }
 
-/**validate username */
-function usernameVerify(error = {}, values) {
-    if (!values.username) {
-        error.username = toast.error('Username Required...!')
-    } else if (values.username.includes(" ")) {
-        error.username = toast.error('Invalid Username...!')
+/**validate email / username */
+function emailVerify(error = {}, values) {
+    if (!values.email) {
+        error.email = toast.error('Email Required...!')
+    } else if (values.email.includes(" ")) {
+        error.email = toast.error('Invalid Email...!')
     }
 
     return error;
 }
 
 /** validate email */
-function emailVerify(error = {}, values) {
+function emailVerifyy(error = {}, values) {
     if (!values.email) {
         error.email = toast.error("Email Required...!");
     } else if (values.email.includes(" ")) {

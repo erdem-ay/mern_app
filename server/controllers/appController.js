@@ -107,11 +107,13 @@ function generateToken(userId) {
 /** GET: http://localhost:8080/api/user/example123 */
 export const getUser = async (req, res) => {
 
-    const { username } = req.params;
+    const { email } = req.params;
+    
+    console.log(email)
 
     try {
         // Find the user with the specified username
-        const user = await UserModel.findOne({ username });
+        const user = await UserModel.findOne({ email });
 
         if (!user) {
             // If user does not exist, return 404 Not Found status
