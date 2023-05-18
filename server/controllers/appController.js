@@ -143,6 +143,7 @@ export const updateUser = async (req, res) => {
 
     // const userId = req.params.id;
     const { userId } = req.user;
+    console.log("user;ID", userId)
 
     if (!userId) {
         return res.status(401).send({ error: "User Not Found...!" });
@@ -152,10 +153,10 @@ export const updateUser = async (req, res) => {
 
     UserModel.updateOne({ _id: userId }, body)
         .then(() => {
-            return res.status(201).send({ msg: "Record Updated...!" });
+            return res.status(201).json({ msg: "Record Updated...!" });
         })
         .catch((error) => {
-            return res.status(500).send({ error });
+            return res.status(500).json({ error });
         });
 }
 

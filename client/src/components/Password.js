@@ -1,29 +1,42 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import avatar from '../assets/profile.png'
-import { Toaster } from 'react-hot-toast';
+import toast, { Toaster } from 'react-hot-toast';
 import { useFormik } from 'formik'
 import { passwordValidate } from '../helper/validate';
 import useFetch from '../hooks/fetch.hook';
 import { useAuthStore } from '../store/store';
+import { verifyPassword } from "../helper/helper"
 
 import styles from "../styles/Email.module.css"
 
 export default function Password() {
 
-  const { email  } = useAuthStore(state => state.auth)
+  const navigate = useNavigate()
+  const { email } = useAuthStore(state => state.auth)
   const [{ isLoading, apiData, serverError }] = useFetch(`user/${email}`)
-  
+
   const formik = useFormik({
     initialValues: {
-      password: 'admin13'
+      password: 'ay@123'
     },
     validate: passwordValidate,
     validateOnBlur: false,
     validateOnChange: false,
     onSubmit: async values => {
-      console.log(values)
-      
+
+      let loginPromise = verifyPassword({ email, password: values.password })
+      toast.promise(loginPromise, {
+        loading: 'Checking...',
+        success: <b>Login Successfully...!</b>,
+        error: <b>Password Not Match!</b>
+      })
+
+      loginPromise.then(res => {
+        let { token } = res.data
+        localStorage.setItem('token', token)
+        navigate('/profile')
+      })
     }
   })
 
@@ -39,7 +52,7 @@ export default function Password() {
         <div className={styles.glass}>
 
           <div className="title flex flex-col items-center">
-            <h4 className='text-5xl font-bold'>Hello {apiData?.firstName || apiData?.username}</h4>
+            <h4 className='text-5xl font-bold'>Hello {apiData?.firstName ? apiData.firstName.charAt(0).toUpperCase() + apiData.firstName.slice(1) : (apiData?.username ? apiData.username.charAt(0).toUpperCase() + apiData.username.slice(1) : '')}</h4>
             <span className='py-4 text-xl w-2/3 text-center text-gray-500'>
               Explore More by connecting with us.
             </span>

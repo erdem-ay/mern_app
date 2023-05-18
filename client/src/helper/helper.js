@@ -1,10 +1,17 @@
 import axios from 'axios'
-
+import jwt_decode from "jwt-decode"
 axios.defaults.baseURL = process.env.REACT_APP_SERVER_DOMAIN;
 
 /** Make API Requests */
 
 
+/** To get Email from Token */
+export const getEmail = async () => {
+    const token = localStorage.getItem('token')
+    if (!token) return Promise.reject("Cannot find Token")
+    let decode = jwt_decode(token)
+   return decode
+}
 
 /** authenticate function */
 export const authenticate = async (email) => {
@@ -69,8 +76,10 @@ export async function updateUser(response) {
     }
 }
 
+
+// Sonrasında hata olursa burada ki Usernameden kaynaklanabilir ****
 /** generate OTP */
-export async function generateOTP(email) {
+export async function generateOTP(email,username) {
     try {
         const { data: { code }, status } = await axios.get('/api/generateOTP', { params: { email } });
 

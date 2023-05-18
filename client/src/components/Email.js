@@ -15,7 +15,7 @@ export default function Email() {
 
   const formik = useFormik({
     initialValues: {
-      email: 'example13@gmail.com'
+      email: 'erdem@ay.com'
     },
     validate: emailValidate,
     validateOnBlur: false,

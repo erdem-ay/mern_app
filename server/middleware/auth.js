@@ -7,7 +7,7 @@ export default async function Auth(req, res, next) {
     try {
 
         // access authorize header to validate request
-        const token = req.headers.authorization.splite(" ")[1];
+        const token = req.headers.authorization.split(" ")[1];
 
         // Retrieve the user details for the logged in user
         const decodedToken = await Jwt.verify(token, ENV.JWT_SECRET)
