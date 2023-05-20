@@ -10,7 +10,7 @@ export const getEmail = async () => {
     const token = localStorage.getItem('token')
     if (!token) return Promise.reject("Cannot find Token")
     let decode = jwt_decode(token)
-   return decode
+    return decode
 }
 
 /** authenticate function */
@@ -79,31 +79,56 @@ export async function updateUser(response) {
 
 // Sonrasında hata olursa burada ki Usernameden kaynaklanabilir ****
 /** generate OTP */
-export async function generateOTP(email,username) {
+export async function generateOTP(email) {
     try {
-        const { data: { code }, status } = await axios.get('/api/generateOTP', { params: { email } });
-
-        // send mail with the OTP
-        if (status === 201) {
-            let { data: { email } } = await getUser({ username });
-            let text = `Your Password Recovery OTP is ${code}. Verify and recover your password.`;
-            await axios.post('/api/registerMail', { username, userEmail: email, text, subject: "Password Recovery OTP" })
-        }
-        return Promise.resolve(code);
+      const { data: { code }, status } = await axios.get('/api/generateOTP', { params: { email } });
+  
+      // OTP ile bir e-posta gönder
+      if (status === 200) {
+        const { data: { email, username } } = await getUser({ email });
+        console.log(email, username); // Kontrol amaçlı, doğru verileri alıp almadığınızı kontrol edin
+        const text = `Your Password Recovery OTP is ${code}. Verify and recover your password.`;
+        await axios.post('/api/registerMail', { userEmail: email, text, subject: "Password Recovery OTP" });
+      }
+      return code;
     } catch (error) {
-        return Promise.reject({ error });
+      return error;
     }
-}
+  }
+  
+
+
+
+
 
 /** verify OTP */
-export const verifyOTP = async (email, code) => {
+// export const verifyOTP = async (email, code) => {
+//     try {
+//         const { data, status } = await axios.get('/api/verifyOTP', { params: { email, code } });
+//         return { data, status };
+//     } catch (error) {
+//         return Promise.reject(error);
+//     }
+// };
+
+export async function verifyOTP({ email, code }) {
     try {
-        const { data, status } = await axios.get('/api/verifyOTP', { params: { email, code } });
-        return { data, status };
+      const response = await axios.get('/api/verifyOTP', {
+        params: {
+          email: email,
+          code: code
+        }
+      });
+      const { status } = response;
+      return { status };
     } catch (error) {
-        return Promise.reject(error);
+      console.error(error);
+      throw new Error("Error while verifying OTP");
     }
-};
+  }
+  
+  
+  
 
 /** reset password */
 export async function resetPassword({ email, password }) {
