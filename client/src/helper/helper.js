@@ -121,13 +121,11 @@ export async function verifyOTP({ email, code }) {
       });
       const { status } = response;
       return { status };
+      
     } catch (error) {
-      console.error(error);
-      throw new Error("Error while verifying OTP");
+        return {message: error.response.data.error}
     }
   }
-  
-  
   
 
 /** reset password */
